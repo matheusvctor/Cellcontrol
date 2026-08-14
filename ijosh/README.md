@@ -1,16 +1,86 @@
-# React + Vite
+# I Josh · Controle de Estoque
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Sistema de gerenciamento de estoque para loja de celulares. Interface minimalista, intuitiva e focada em agilidade no dia a dia da loja.
 
-Currently, two official plugins are available:
+## Funcionalidades
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Dashboard** com visão geral:
+  - Produtos cadastrados, valor em estoque e itens em alerta
+  - Receita dos últimos 7 dias + ticket médio
+  - Gráfico de vendas por dia (com variação vs ontem)
+  - Entradas vs saídas por período
+  - Ranking de produtos mais vendidos
+  - Previsão de reposição (quanto pedir e valor estimado do pedido)
+  - Estoque por categoria e últimas movimentações
+- **Produtos**: cadastro, edição e exclusão com busca, filtros por marca e categoria, status automático (em estoque / baixo / esgotado)
+- **Movimentações**: entradas e saídas com motivo, validação de saldo disponível e histórico filtrável
+- **Tema claro/escuro** com preferência salva
+- **Responsivo**: sidebar no desktop, navegação inferior no mobile
+- **Persistência local**: dados salvos no navegador (localStorage)
+- Dados de exemplo incluídos para testes
 
-## React Compiler
+## Tecnologias
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| Camada        | Stack                                   |
+| ------------- | --------------------------------------- |
+| Framework     | React 19                                |
+| Build         | Vite 8                                  |
+| Gráficos      | Recharts (carregado sob demanda - lazy) |
+| Ícones        | lucide-react                            |
+| Persistência  | localStorage                            |
+| Lint          | oxlint                                  |
 
-## Expanding the Oxlint configuration
+## Como rodar
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+```bash
+npm install
+npm run dev
+```
+
+Acesse o endereço indicado no terminal (padrão: `http://localhost:5173`).
+
+## Scripts
+
+| Comando         | Ação                         |
+| --------------- | ---------------------------- |
+| `npm run dev`   | Servidor de desenvolvimento  |
+| `npm run build` | Build de produção em `dist/` |
+| `npm run preview` | Pré-visualiza build        |
+| `npm run lint`  | Lint (oxlint)                |
+
+## Estrutura
+
+```
+src/
+├── App.jsx              # Layout, navegação e tema
+├── components.jsx       # Modal, badges, toasts, empty states
+├── palette.js           # Cores determinísticas por marca
+├── store.js             # Estado + persistência (localStorage)
+├── styles.css           # Design system e temas
+└── views/
+    ├── Dashboard.jsx        # Visão geral + KPIs
+    ├── BestSellersChart.jsx # Gráfico de mais vendidos (lazy)
+    ├── SalesCharts.jsx      # Vendas por período e fluxo (lazy)
+    ├── Products.jsx         # CRUD de produtos
+    └── Movements.jsx        # Entradas e saídas
+```
+
+## Modelo de dados
+
+- **Produto**: `id, name, brand, category, price, quantity, minStock`
+- **Movimentação**: `id, productId, productName, type (in|out), quantity, reason, date`
+
+O estoque é atualizado automaticamente ao registrar uma movimentação. Saídas maiores que o saldo disponível são bloqueadas.
+
+## Roadmap
+
+- Back-end (API + banco de dados)
+- Autenticação de funcionários
+- Custo de compra por produto (margem e lucro bruto)
+- Produtos parados (sem movimentação em 30+ dias)
+- Relatório de vendas com períodos personalizados
+- Exportação de dados (CSV)
+
+## Licença
+
+Uso interno — I Josh.
